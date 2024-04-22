@@ -1,7 +1,7 @@
 export function Header(){
     return (
-        <div>
-            <h1 className="text-red-700">Cadê o trem?</h1>
+        <div className="h-20 bg-gray-300 flex items-center">
+            <h1 className="ml-6">Logo</h1>
         </div>
     )
 }
