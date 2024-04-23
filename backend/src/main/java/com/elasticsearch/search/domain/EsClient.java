@@ -1,8 +1,10 @@
 package com.elasticsearch.search.domain;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
@@ -19,6 +21,11 @@ import org.elasticsearch.client.RestClient;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class EsClient {
@@ -71,5 +78,20 @@ public class EsClient {
         }
 
         return response;
+    }
+
+    public static List<String> matchPhraseQuery(String query){
+        if(query.contains("\"")){
+            Pattern quotesPattern = Pattern.compile("\\Q\"\\E(.*?)\\Q\"\\E", Pattern.DOTALL);
+            Matcher matchedPhrases = quotesPattern.matcher(query);
+
+            List<String> matchPhraseContentList = matchedPhrases.results().map(m -> m.group(1)).toList();
+            return matchPhraseContentList;
+        }
+        return new ArrayList<String>();
+    }
+
+    public static void main(String[] args) {
+
     }
 }
