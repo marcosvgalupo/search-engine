@@ -65,13 +65,28 @@ public class EsClient {
     }
 
     public SearchResponse search(String query) {
+
+        Query queryToBeDone;
         Query matchQuery = MatchQuery.of(q -> q.field("content").query(query))._toQuery();
+
+//        if (!matchPhraseQuery(query).isEmpty()){
+//            queryToBeDone = (new BoolQuery.Builder()).should(matchQuery).build()._toQuery();
+//            System.out.println("entrou");
+//        }
+//        else{
+//            queryToBeDone = matchQuery;
+//        }
+
+        queryToBeDone = (new BoolQuery.Builder()).should(matchQuery).build()._toQuery();
+
+        //var b = new BoolQuery.Builder();
+        //Query matchPhrase = b.should(matchQuery).build()._toQuery();
 
         SearchResponse<ObjectNode> response;
         try {
             response = elasticsearchClient.search(s -> s
                 .index("wikipedia").from(0).size(10)
-                .query(matchQuery), ObjectNode.class
+                .query(queryToBeDone), ObjectNode.class
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -92,6 +107,6 @@ public class EsClient {
     }
 
     public static void main(String[] args) {
-
+        //System.out.println(matchPhraseQuery("The binary \"search\" and the algorithm \"teste\""));
     }
 }
