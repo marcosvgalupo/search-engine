@@ -6,7 +6,10 @@ import com.elasticsearch.search.domain.EsClient;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +22,7 @@ public class SearchService {
     }
 
     public List<Result> submitQuery(String query) {
-        var searchResponse = esClient.search(query);
+        var searchResponse = esClient.search(query, treatQuotes(query));
         List<Hit<ObjectNode>> hits = searchResponse.hits().hits();
 
         var resultsList = hits.stream().map(h ->
@@ -39,4 +42,17 @@ public class SearchService {
         content = content.replaceAll("^\\s+", "");
         return content;
     }
+
+    public static List<String> treatQuotes(String query){
+        String newQuery = query.substring(1, query.length() - 1);
+
+        if(newQuery.contains("\"")){
+            Pattern quotesPattern = Pattern.compile("\\Q\"\\E(.*?)\\Q\"\\E", Pattern.DOTALL);
+            Matcher quotesContent = quotesPattern.matcher(newQuery);
+
+            return quotesContent.results().map(m -> m.group(1)).toList();
+        }
+        return new ArrayList<String>();
+    }
+
 }
