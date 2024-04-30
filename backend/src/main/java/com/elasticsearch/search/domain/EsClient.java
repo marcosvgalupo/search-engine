@@ -62,13 +62,12 @@ public class EsClient {
 
         Query lastQuery;
         if(!contentInQuotes.isEmpty()){
-            Query matchPhrase = MatchPhraseQuery.of(q -> q.field("content").query(contentInQuotes.get(0)))._toQuery();
-            lastQuery = (new BoolQuery.Builder()).must(matchPhrase).build()._toQuery();
-            System.out.println("entrou");
+            Query matchPhrase = matchPhrase("content", query);
+            lastQuery = must(matchPhrase);
         }
         else {
-            Query matchQuery = MatchQuery.of(q -> q.field("content").query(query))._toQuery();
-            lastQuery = (new BoolQuery.Builder()).should(matchQuery).build()._toQuery();
+            Query matchQuery = match("content", query);
+            lastQuery = should(matchQuery);
         }
 
         SearchResponse<ObjectNode> response;
@@ -82,6 +81,37 @@ public class EsClient {
         }
 
         return response;
+    }
+
+
+
+    // Queries
+    public Query must(Query... qs){
+        BoolQuery.Builder bq = new BoolQuery.Builder();
+
+        for(Query q :  qs){
+            bq.must(q);
+        }
+
+        return bq.build()._toQuery();
+    }
+
+    public Query should(Query... qs){
+        BoolQuery.Builder bq = new BoolQuery.Builder();
+
+        for(Query q : qs){
+            bq.should(q);
+        }
+
+        return bq.build()._toQuery();
+    }
+
+    public Query matchPhrase(String field, String q){
+        return MatchPhraseQuery.of(s -> s.field(field).query(q))._toQuery();
+    }
+
+    public Query match(String field, String q){
+        return MatchQuery.of(s -> s.field(field).query(q))._toQuery();
     }
 
 }
