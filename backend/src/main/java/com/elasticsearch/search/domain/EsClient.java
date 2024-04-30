@@ -84,7 +84,6 @@ public class EsClient {
     }
 
 
-
     // Queries
     public Query must(Query... qs){
         BoolQuery.Builder bq = new BoolQuery.Builder();
@@ -114,4 +113,12 @@ public class EsClient {
         return MatchQuery.of(s -> s.field(field).query(q))._toQuery();
     }
 
+    public Query mustNot(Query... qs){
+      BoolQuery.Builder bq = new BoolQuery.Builder();
+
+      for(Query q : qs){
+          bq.mustNot(q);
+      }
+      return bq.build()._toQuery();
+    }
 }
