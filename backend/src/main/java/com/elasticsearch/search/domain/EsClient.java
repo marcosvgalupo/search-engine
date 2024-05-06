@@ -24,6 +24,7 @@ import java.util.List;
 @Component
 public class EsClient {
     private ElasticsearchClient elasticsearchClient;
+    private static final int RESULT_MAX_VALUE = 10000;
 
     public EsClient() {
         createConnection();
@@ -73,7 +74,7 @@ public class EsClient {
         SearchResponse<ObjectNode> response;
         try {
             response = elasticsearchClient.search(s -> s
-                .index("wikipedia").from(0).size(10)
+                .index("wikipedia").from(0).size(RESULT_MAX_VALUE)
                 .query(lastQuery), ObjectNode.class
             );
         } catch (IOException e) {

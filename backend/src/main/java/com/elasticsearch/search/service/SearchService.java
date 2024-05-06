@@ -44,7 +44,7 @@ public class SearchService {
     }
 
     public static List<String> treatQuotes(String query){
-        String newQuery = query.substring(1, query.length() - 1);
+        String newQuery = query;
 
         if(newQuery.contains("\"")){
             Pattern quotesPattern = Pattern.compile("\\Q\"\\E(.*?)\\Q\"\\E", Pattern.DOTALL);
@@ -55,4 +55,15 @@ public class SearchService {
         return new ArrayList<String>();
     }
 
+    public int countHits(String query) {
+        var searchResponse = esClient.search(query, treatQuotes(query));
+        List<Hit<ObjectNode>> hits = searchResponse.hits().hits();
+        return hits.size();
+    }
+
+
+    public static void main(String[] args) {
+        var s = new SearchService(new EsClient());
+        System.out.println(s.countHits("randomized binary"));
+    }
 }
