@@ -5,7 +5,6 @@ import { Search, MoreHorizontal, ChevronLeft, ChevronsLeft, ChevronRight, Chevro
 export function SearchList(){
     return (
         <div>
-           <SearchInput />
             {/* <Table>
                 <thead>
 
