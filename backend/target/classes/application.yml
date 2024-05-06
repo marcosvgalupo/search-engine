@@ -2,3 +2,12 @@ server:
   port: 8080
   servlet:
     context-path: /v1
+
+spring:
+  mvc:
+    cors:
+      mapping: /v1/**
+      allowed-origins: http://localhost:5173
+      allowed-methods: GET, POST, PUT, DELETE
+      allow-credentials: true
+

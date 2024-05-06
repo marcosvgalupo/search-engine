@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@CrossOrigin
+@CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
 public class SearchController implements SearchApi {
 
