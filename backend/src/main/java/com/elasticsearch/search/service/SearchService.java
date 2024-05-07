@@ -44,11 +44,9 @@ public class SearchService {
     }
 
     public static List<String> treatQuotes(String query){
-        String newQuery = query;
-
-        if(newQuery.contains("\"")){
+        if(query.contains("\"")){
             Pattern quotesPattern = Pattern.compile("\\Q\"\\E(.*?)\\Q\"\\E", Pattern.DOTALL);
-            Matcher quotesContent = quotesPattern.matcher(newQuery);
+            Matcher quotesContent = quotesPattern.matcher(query);
 
             return quotesContent.results().map(m -> m.group(1)).toList();
         }

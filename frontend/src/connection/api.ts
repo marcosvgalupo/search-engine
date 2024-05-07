@@ -1,17 +1,15 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios';
 
-const apiURL: string = 'http://localhost:8080/v1/search?query='
+const apiURL: string = 'http://localhost:8080/v1/search?query=';
 
-
-function fetchApi(q: string){
-    axios
-        .get(apiURL + q)
-        .then( res => console.log(res) )
-        .catch( err => console.log(err) )
+async function fetchApi(q: string): Promise<any> {
+    try {
+        const response: AxiosResponse = await axios.get(apiURL + q);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
-export {fetchApi};
-
-
-
-
+export { fetchApi };

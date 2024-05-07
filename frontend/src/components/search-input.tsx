@@ -1,22 +1,46 @@
 // SearchInput.tsx
-import React, { useState } from "react";
+import React, { ComponentProps, useState } from "react";
 import { fetchApi } from "../connection/api";
+import { twMerge } from "tailwind-merge";
 
-export function SearchInput() {
+
+export interface DataElement{
+    title: string;
+    url: string;
+    abs: string;
+}
+
+
+interface Props  extends ComponentProps<'input'>{
+  setData?: React.Dispatch<React.SetStateAction<DataElement[]>>;
+}
+
+
+
+
+export function SearchInput({setData, ...props}: Props) {
+
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearch = () => {
+
+
+
+  const handleSearch = async() => {
     console.log(searchTerm);
-    fetchApi(searchTerm);
+    const responseData = await fetchApi(searchTerm);
+    console.log(responseData);
+    if(setData)
+      setData(responseData);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault(); // Impede o envio do formulário padrão
+      //(document.getElementById("search-input") as HTMLInputElement).value = "";
+      setSearchTerm("");
       handleSearch();
     }
   };
-
   return (
     <form
       style={{ width: "30em", boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)" }}
@@ -24,7 +48,13 @@ export function SearchInput() {
     >
       <input
         id="search-input"
-        className="bg-transparent flex-1 outline-none h-auto border-0 p-0 text-sm text-white text-lg placeholder-[#fceaa1]"
+        {...props}
+        className={
+          twMerge(
+            "input-autofill bg-transparent flex-1 outline-none h-auto border-0 p-0 text-sm text-white placeholder-[#fceaa1]",
+            props.className
+          ) 
+        }
         placeholder="Search..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
