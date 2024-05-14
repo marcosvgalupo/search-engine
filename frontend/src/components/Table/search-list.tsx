@@ -14,8 +14,8 @@ interface SearchListProps{
 
 export function SearchList({data}: SearchListProps){
     return (
-        <div>
-          <Table>
+        <div className='w-full overflow-x-auto bg-zinc-800'>
+          <Table className='min-w-full'>
             <tbody>
             {data.slice(0,10).map((d, index) => (
                  <React.Fragment key={index}>
