@@ -47,7 +47,7 @@ export function SearchList({data}: SearchListProps){
                  <React.Fragment key={index}>
                     <TableRow>
                         <TableCell colSpan={1} className='font-extrabold text-amber-300'>{d.title}</TableCell>
-                        <TableCell>
+                        <TableCell colSpan={4}>
                               <a href={d.url} className='flex text-[#fceaa1] justify-end transition-colors duration-300 hover:text-yellow-300' target='_blank'>
                                 <div className='flex transition-colors duration-300 hover:text-yellow-300'>
                                   <span>View More</span>
@@ -57,14 +57,14 @@ export function SearchList({data}: SearchListProps){
                          </TableCell>
                     </TableRow>
                      <TableRow>
-                         <TableCell colSpan={2}>{d.abs}</TableCell>
+                         <TableCell colSpan={4}>{d.abs}</TableCell>
                     </TableRow>
                 </React.Fragment>
             ))}
             </tbody>
             <tfoot>
             <tr>
-                        <TableCell colSpan={3}>Showing 10 of {data.length} items</TableCell>
+                        <TableCell colSpan={3}>Showing {page} of {data.length} items</TableCell>
                         <TableCell className="text-right" colSpan={3}>
                             <div className='inline-flex items-center gap-8'>
                                 <span>Page {page} of {totalPages}</span>
