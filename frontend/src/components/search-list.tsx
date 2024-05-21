@@ -64,7 +64,7 @@ export function SearchList({data}: SearchListProps){
             </tbody>
             <tfoot>
             <tr>
-                        <TableCell colSpan={3}>Showing {page} of {data.length} items</TableCell>
+                        <TableCell colSpan={3}>Showing {page* 10} of {data.length} items</TableCell>
                         <TableCell className="text-right" colSpan={3}>
                             <div className='inline-flex items-center gap-8'>
                                 <span>Page {page} of {totalPages}</span>
