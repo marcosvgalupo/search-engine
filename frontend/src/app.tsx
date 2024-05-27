@@ -9,8 +9,6 @@ export function App() {
   const [home, setHome] = useState(1);
   const [data, setData] = useState<DataElement[]>([]);
 
-  
-
   return (
       <div className="flex flex-col min-h-screen bg-zinc-800">
         <Header className="sticky top-0"/>
