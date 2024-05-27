@@ -17,22 +17,30 @@ export function SearchList({data}: SearchListProps){
     const totalPages = Math.ceil(data.length/10)
 
     const [page, setPage] = useState(1);
+    const [showing, setShowing] = (data.length < 10) ? useState(data.length) : useState(10)
 
 
     function goToNextPage(){
       setPage(page+1)
+      if(page == totalPages)
+        setShowing((data.length - showing) + showing);
+      else
+        setShowing(showing + 10);
     }
 
     function goToPreviousPage() { 
-      setPage(page-1) 
+      setPage(page-1)
+      setShowing(showing-10); 
     }
 
     function goToLastPage() { 
-      setPage(totalPages) 
+      setPage(totalPages)
+      setShowing(data.length) 
     }
 
     function goToFirstPage() { 
-      setPage(1) 
+      setPage(1)
+      setShowing(data.length/totalPages) 
     }
 
 
@@ -64,7 +72,7 @@ export function SearchList({data}: SearchListProps){
             </tbody>
             <tfoot>
             <tr>
-                        <TableCell colSpan={3}>Showing {page* 10} of {data.length} items</TableCell>
+                        <TableCell colSpan={3}>Showing {showing} of {data.length} items</TableCell>
                         <TableCell className="text-right" colSpan={3}>
                             <div className='inline-flex items-center gap-8'>
                                 <span>Page {page} of {totalPages}</span>
@@ -73,7 +81,7 @@ export function SearchList({data}: SearchListProps){
                                        <img src="src/icons/chevrons-left.svg" alt="Chevrons Left" />
                                     </IconButton>
                                     <IconButton onClick={goToPreviousPage} disabled={page === 1}>
-                                        <img src="src/icons/chevron-left.svg" alt="Chevron Left" /> {/** size 4 */}
+                                        <img src="src/icons/chevron-left.svg" alt="Chevron Left" />
                                     </IconButton>
                                     <IconButton onClick={goToNextPage} disabled={page === totalPages}>
                                         <img src="src/icons/chevron-right.svg" alt="Chevron Right" />

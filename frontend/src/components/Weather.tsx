@@ -1,4 +1,4 @@
-import { ComponentProps, useEffect, useState } from "react";
+import { ComponentProps, useEffect} from "react";
 import { twMerge } from "tailwind-merge";
 import { fetchWeatherApi } from "../connection/weather-api";
 
@@ -50,12 +50,12 @@ export function Weather({weather, setWeather, ...props}: WeatherProps){
                     <p className="text-lg font-rubik font-medium">{weather.temp}</p>
                     <div className="flex flex-col ml-2">
                        <p className="text-xs font-rubik font-semibold">{weather.main}</p>
-                       <p className="text-xs font-redditMono">{weather.name},{weather.country}</p>
+                       <p className="text-xs font-redditMono">{weather.name} | {weather.country}</p>
                     </div>
                   </div>
                 </div>
           ) : (
-        <p className="text-white">Carregando...</p>
+        <p className="text-white">Loading...</p>
       )}
         </div>
     )

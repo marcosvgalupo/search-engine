@@ -4,6 +4,7 @@ import { fetchApi } from "../connection/api";
 import { twMerge } from "tailwind-merge";
 
 
+
 export interface DataElement{
     title: string;
     url: string;
@@ -13,12 +14,14 @@ export interface DataElement{
 
 interface Props  extends ComponentProps<'input'>{
   setData?: React.Dispatch<React.SetStateAction<DataElement[]>>;
+  setHome: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
 
 
 
 
-export function SearchInput({setData, ...props}: Props) {
+export function SearchInput({setData, setHome, ...props}: Props) {
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -26,21 +29,23 @@ export function SearchInput({setData, ...props}: Props) {
 
 
   const handleSearch = async() => {
-    console.log(searchTerm);
     const responseData = await fetchApi(searchTerm);
-    console.log(responseData);
     if(setData)
       setData(responseData);
   };
 
+
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      event.preventDefault(); // Impede o envio do formulário padrão
-      //(document.getElementById("search-input") as HTMLInputElement).value = "";
+      event.preventDefault();
       setSearchTerm("");
+      setHome(false);
       handleSearch();
     }
   };
+
+
+  
   return (
     <form
       style={{ width: "30em", boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)" }}
