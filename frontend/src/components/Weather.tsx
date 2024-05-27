@@ -7,7 +7,8 @@ export interface WeatherInfo{
     main: string,
     temp: string,
     country: string,
-    name: string
+    name: string,
+    icon: string,
 }
 
 
@@ -42,13 +43,18 @@ export function Weather({weather, setWeather, ...props}: WeatherProps){
             )
         }
         >   
-                {weather ? (
-                    <div className="text-white">
-          <p>{`Clima: ${weather.main}`}</p>
-          <p>{`Temperatura: ${weather.temp}`}</p>
-          <p>{`Localização: ${weather.name}, ${weather.country}`}</p>
-        </div>
-      ) : (
+        { weather ? (
+                <div className="text-white justify-center items-center">
+                  <div className="flex justify-center place-items-center">
+                    <img src={"https://openweathermap.org/img/wn/"+ weather.icon + ".png"} alt="weather-icon" />
+                    <p className="text-lg font-rubik font-medium">{weather.temp}</p>
+                    <div className="flex flex-col ml-2">
+                       <p className="text-xs font-rubik font-semibold">{weather.main}</p>
+                       <p className="text-xs font-redditMono">{weather.name},{weather.country}</p>
+                    </div>
+                  </div>
+                </div>
+          ) : (
         <p className="text-white">Carregando...</p>
       )}
         </div>

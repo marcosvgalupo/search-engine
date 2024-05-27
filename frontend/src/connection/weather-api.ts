@@ -31,10 +31,11 @@ async function fetchWeatherApi(): Promise<any> {
         const response: AxiosResponse = await axios.get(apiURL + myLat + myLon + myApiKey);
         console.log(response);
         return {
-            temp: Math.floor(response.data.main.temp - 273) + " °C",
+            temp: Math.round(response.data.main.temp - 273) + " °C",
             main: response.data.weather[0].main,
             country: response.data.sys.country,
             name: response.data.name,
+            icon: response.data.weather[0].icon
         };
     } catch (error) {
         console.log(error);
