@@ -9,14 +9,14 @@ import { IconButton } from './icon-button';
 
 interface SearchListProps{
     data: DataElement[];
+    page: number;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 
-export function SearchList({data}: SearchListProps){
+export function SearchList({data, page, setPage}: SearchListProps){
 
     const totalPages = Math.ceil(data.length/10)
-
-    const [page, setPage] = useState(1);
     const [showing, setShowing] = (data.length < 10) ? useState(data.length) : useState(10)
 
 
@@ -42,9 +42,6 @@ export function SearchList({data}: SearchListProps){
       setPage(1)
       setShowing(data.length/totalPages) 
     }
-
-
-
 
 
     return (

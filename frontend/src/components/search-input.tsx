@@ -15,13 +15,13 @@ export interface DataElement{
 interface Props  extends ComponentProps<'input'>{
   setData?: React.Dispatch<React.SetStateAction<DataElement[]>>;
   setHome: React.Dispatch<React.SetStateAction<boolean>>;
-
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 
 
 
-export function SearchInput({setData, setHome, ...props}: Props) {
+export function SearchInput({setData, setHome, setPage,...props}: Props) {
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -30,8 +30,7 @@ export function SearchInput({setData, setHome, ...props}: Props) {
 
   const handleSearch = async() => {
     const responseData = await fetchApi(searchTerm);
-    if(setData)
-      setData(responseData);
+    if(setData) setData(responseData);
   };
 
 
@@ -40,6 +39,7 @@ export function SearchInput({setData, setHome, ...props}: Props) {
       event.preventDefault();
       setSearchTerm("");
       setHome(false);
+      setPage(1);
       handleSearch();
     }
   };
