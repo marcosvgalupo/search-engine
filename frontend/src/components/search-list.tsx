@@ -11,13 +11,14 @@ interface SearchListProps{
     data: DataElement[];
     page: number;
     setPage: React.Dispatch<React.SetStateAction<number>>;
+    showing: number;
+    setShowing: React.Dispatch<React.SetStateAction<number>>;
 }
 
 
-export function SearchList({data, page, setPage}: SearchListProps){
+export function SearchList({data, page, setPage, showing, setShowing}: SearchListProps){
 
     const totalPages = Math.ceil(data.length/10)
-    const [showing, setShowing] = (data.length < 10) ? useState(data.length) : useState(10)
 
 
     function goToNextPage(){

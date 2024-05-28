@@ -16,12 +16,13 @@ interface Props  extends ComponentProps<'input'>{
   setData?: React.Dispatch<React.SetStateAction<DataElement[]>>;
   setHome: React.Dispatch<React.SetStateAction<boolean>>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  setShowing: React.Dispatch<React.SetStateAction<number>>;
 }
 
 
 
 
-export function SearchInput({setData, setHome, setPage,...props}: Props) {
+export function SearchInput({setData, setHome, setPage, setShowing,...props}: Props) {
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -30,6 +31,13 @@ export function SearchInput({setData, setHome, setPage,...props}: Props) {
 
   const handleSearch = async() => {
     const responseData = await fetchApi(searchTerm);
+    if(responseData.length < 10){
+      setShowing(responseData.length)
+      console.log("entrou")
+    }
+    else{
+      setShowing(10);
+    }
     if(setData) setData(responseData);
   };
 
