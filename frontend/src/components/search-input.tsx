@@ -25,8 +25,7 @@ interface Props  extends ComponentProps<'input'>{
 export function SearchInput({setData, setHome, setPage, setShowing,...props}: Props) {
 
   const [searchTerm, setSearchTerm] = useState("");
-
-
+  const emptySearch = /^[\s]*$/
 
 
   const handleSearch = async() => {
@@ -43,7 +42,7 @@ export function SearchInput({setData, setHome, setPage, setShowing,...props}: Pr
 
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.type === "keydown" && event.key === "Enter" && !emptySearch.test(searchTerm) ) {
       event.preventDefault();
       setSearchTerm("");
       setHome(false);
@@ -51,6 +50,16 @@ export function SearchInput({setData, setHome, setPage, setShowing,...props}: Pr
       handleSearch();
     }
   };
+
+  const handleClick = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if(e.type == "click" &&  !emptySearch.test(searchTerm) ){
+      e.preventDefault();
+      setSearchTerm("");
+      setHome(false);
+      setPage(1);
+      handleSearch();
+    }
+  }
 
 
   
@@ -73,7 +82,7 @@ export function SearchInput({setData, setHome, setPage, setShowing,...props}: Pr
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={handleKeyPress}
       />
-      <button type="button" className="flex items-center" onClick={handleSearch}>
+      <button type="submit" className="flex items-center" onClick={handleClick}>
         <img src="src/icons/search-icon.svg" alt="Search Icon" />
       </button>
     </form>

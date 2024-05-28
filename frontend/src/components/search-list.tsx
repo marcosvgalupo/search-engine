@@ -54,9 +54,9 @@ export function SearchList({data, page, setPage, showing, setShowing}: SearchLis
                     <TableRow>
                         <TableCell colSpan={1} className='font-extrabold text-amber-300'>{d.title}</TableCell>
                         <TableCell colSpan={4}>
-                              <a href={d.url} className='flex text-[#fceaa1] justify-end transition-colors duration-300 hover:text-yellow-300' target='_blank'>
-                                <div className='flex transition-colors duration-300 hover:text-yellow-300'>
-                                  <span>View More</span>
+                              <a href={d.url} className='flex text-[#fceaa1] justify-end transition-colors duration-300 hover:text-amber-300 group' target='_blank'>
+                                <div className='flex'>
+                                  <span className='group-hover:border-[#fceaa1] border-b-[1px] border-transparent'>View More</span>
                                   <img src="src/icons/arrow-up-right.svg"/>
                                 </div>
                               </a> 
