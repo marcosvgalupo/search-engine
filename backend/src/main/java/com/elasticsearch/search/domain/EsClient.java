@@ -3,6 +3,10 @@ package com.elasticsearch.search.domain;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.search.FieldSuggester;
+import co.elastic.clients.elasticsearch.core.search.Suggester;
+import co.elastic.clients.elasticsearch.core.search.Suggestion;
+import co.elastic.clients.elasticsearch.core.search.SuggestionBuilders;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
@@ -25,6 +29,7 @@ import java.util.List;
 public class EsClient {
     private ElasticsearchClient elasticsearchClient;
     private static final int RESULT_MAX_VALUE = 10000;
+    private Suggester.Builder sb;
 
     public EsClient() {
         createConnection();
@@ -75,7 +80,38 @@ public class EsClient {
         try {
             response = elasticsearchClient.search(s -> s
                 .index("wikipedia").from(0).size(RESULT_MAX_VALUE)
-                .query(lastQuery), ObjectNode.class
+                .query(lastQuery)
+                .suggest(sug -> sug
+                        .suggesters("my-suggestion", v -> v
+                                .term(t -> t
+                                        .field("content").size(2)
+                                )
+                                .text(query)
+                        )
+                )
+                    , ObjectNode.class
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response;
+    }
+
+    public SearchResponse searchSuggestion(String query){
+        SearchResponse<ObjectNode> response;
+        try {
+            response = elasticsearchClient.search(s -> s
+                            .index("wikipedia")
+                            .suggest(sug -> sug
+                                    .suggesters("", v -> v
+                                            .term(t -> t
+                                                    .field("content").size(2)
+                                            )
+                                            .text(query)
+                                    )
+                            )
+                    , ObjectNode.class
             );
         } catch (IOException e) {
             throw new RuntimeException(e);

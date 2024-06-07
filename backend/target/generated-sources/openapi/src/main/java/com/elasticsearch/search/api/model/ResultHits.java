@@ -1,80 +1,90 @@
 package com.elasticsearch.search.api.model;
 
 import java.util.Objects;
-import com.elasticsearch.search.api.model.ResultHits;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.ArrayList;
-import java.util.List;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.io.Serializable;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Result
+ * ResultHits
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-07T11:32:17.674473188-03:00[America/Sao_Paulo]")
 
-public class Result  implements Serializable {
+public class ResultHits  implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("Hits")
-  @Valid
-  private List<ResultHits> hits = null;
+  @JsonProperty("title")
+  private String title;
 
-  @JsonProperty("suggest")
-  private String suggest;
+  @JsonProperty("url")
+  private String url;
 
-  public Result hits(List<ResultHits> hits) {
-    this.hits = hits;
-    return this;
-  }
+  @JsonProperty("abs")
+  private String abs;
 
-  public Result addHitsItem(ResultHits hitsItem) {
-    if (this.hits == null) {
-      this.hits = new ArrayList<>();
-    }
-    this.hits.add(hitsItem);
+  public ResultHits title(String title) {
+    this.title = title;
     return this;
   }
 
   /**
-   * Get hits
-   * @return hits
+   * Get title
+   * @return title
   */
   @ApiModelProperty(value = "")
 
-  @Valid
 
-  public List<ResultHits> getHits() {
-    return hits;
+  public String getTitle() {
+    return title;
   }
 
-  public void setHits(List<ResultHits> hits) {
-    this.hits = hits;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
-  public Result suggest(String suggest) {
-    this.suggest = suggest;
+  public ResultHits url(String url) {
+    this.url = url;
     return this;
   }
 
   /**
-   * Get suggest
-   * @return suggest
+   * Get url
+   * @return url
   */
   @ApiModelProperty(value = "")
 
 
-  public String getSuggest() {
-    return suggest;
+  public String getUrl() {
+    return url;
   }
 
-  public void setSuggest(String suggest) {
-    this.suggest = suggest;
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public ResultHits abs(String abs) {
+    this.abs = abs;
+    return this;
+  }
+
+  /**
+   * Get abs
+   * @return abs
+  */
+  @ApiModelProperty(value = "")
+
+
+  public String getAbs() {
+    return abs;
+  }
+
+  public void setAbs(String abs) {
+    this.abs = abs;
   }
 
 
@@ -86,23 +96,25 @@ public class Result  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Result result = (Result) o;
-    return Objects.equals(this.hits, result.hits) &&
-        Objects.equals(this.suggest, result.suggest);
+    ResultHits resultHits = (ResultHits) o;
+    return Objects.equals(this.title, resultHits.title) &&
+        Objects.equals(this.url, resultHits.url) &&
+        Objects.equals(this.abs, resultHits.abs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hits, suggest);
+    return Objects.hash(title, url, abs);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Result {\n");
+    sb.append("class ResultHits {\n");
     
-    sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
-    sb.append("    suggest: ").append(toIndentedString(suggest)).append("\n");
+    sb.append("    title: ").append(toIndentedString(title)).append("\n");
+    sb.append("    url: ").append(toIndentedString(url)).append("\n");
+    sb.append("    abs: ").append(toIndentedString(abs)).append("\n");
     sb.append("}");
     return sb.toString();
   }

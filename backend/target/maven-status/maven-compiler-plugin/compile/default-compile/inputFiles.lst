@@ -1,0 +1,9 @@
+/home/discente/Vídeos/search-engine/backend/target/generated-sources/openapi/src/main/java/com/elasticsearch/search/api/model/Error.java
+/home/discente/Vídeos/search-engine/backend/target/generated-sources/openapi/src/main/java/com/elasticsearch/search/api/facade/SearchApi.java
+/home/discente/Vídeos/search-engine/backend/src/main/java/com/elasticsearch/search/domain/EsClient.java
+/home/discente/Vídeos/search-engine/backend/target/generated-sources/openapi/src/main/java/com/elasticsearch/search/api/model/Result.java
+/home/discente/Vídeos/search-engine/backend/target/generated-sources/openapi/src/main/java/com/elasticsearch/search/api/model/ResultHits.java
+/home/discente/Vídeos/search-engine/backend/src/main/java/com/elasticsearch/search/controller/SearchController.java
+/home/discente/Vídeos/search-engine/backend/src/main/java/com/elasticsearch/search/service/SearchService.java
+/home/discente/Vídeos/search-engine/backend/src/main/java/com/elasticsearch/search/SearchApplication.java
+/home/discente/Vídeos/search-engine/backend/target/generated-sources/openapi/src/main/java/com/elasticsearch/search/api/facade/ApiUtil.java

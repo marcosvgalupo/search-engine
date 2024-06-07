@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-04-22T20:30:24.602865462-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-07T11:32:17.674473188-03:00[America/Sao_Paulo]")
 
 @Validated
 @Api(value = "search", description = "the search API")
@@ -46,19 +46,19 @@ public interface SearchApi {
      * @return OK (status code 200)
      *         or Unexpected error (status code 500)
      */
-    @ApiOperation(value = "Submits a query to Elasticsearch", nickname = "search", notes = "", response = Result.class, responseContainer = "List", tags={ "search", })
+    @ApiOperation(value = "Submits a query to Elasticsearch", nickname = "search", notes = "", response = Result.class, tags={ "search", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = Result.class, responseContainer = "List"),
+        @ApiResponse(code = 200, message = "OK", response = Result.class),
         @ApiResponse(code = 500, message = "Unexpected error", response = Error.class) })
     @RequestMapping(value = "/search",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default CompletableFuture<ResponseEntity<List<Result>>> search(@ApiParam(value = "Query to be submitted") @Valid @RequestParam(value = "query", required = false) String query) {
+    default CompletableFuture<ResponseEntity<Result>> search(@ApiParam(value = "Query to be submitted") @Valid @RequestParam(value = "query", required = false) String query) {
         return CompletableFuture.supplyAsync(()-> {
             getRequest().ifPresent(request -> {
                 for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                     if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                        String exampleString = "{ \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" }";
+                        String exampleString = "{ \"Hits\" : [ { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" }, { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" } ], \"suggest\" : \"suggest\" }";
                         ApiUtil.setExampleResponse(request, "application/json", exampleString);
                         break;
                     }
