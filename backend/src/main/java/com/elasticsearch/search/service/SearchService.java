@@ -41,7 +41,7 @@ public class SearchService {
 //        var suggestResponse = esClient.searchSuggestion(query);
 //        var suggestions = suggestResponse.suggest();
 
-        String search_suggestion = "";
+        String search_suggestion = "teste";
         result.hits(hitsList);
         result.suggest(search_suggestion);
 
