@@ -38,10 +38,15 @@ public class SearchService {
         ).collect(Collectors.toList());
 
 
-//        var suggestResponse = esClient.searchSuggestion(query);
-//        var suggestions = suggestResponse.suggest();
+        var suggestResponse = esClient.searchSuggestion(query);
+        var suggestions = suggestResponse.suggest();
+
+
+        System.out.println(suggestions);
+        System.out.println(suggestions);
 
         String search_suggestion = "teste";
+//        System.out.println(suggestions);
         result.hits(hitsList);
         result.suggest(search_suggestion);
 

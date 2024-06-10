@@ -6,14 +6,19 @@ import { twMerge } from "tailwind-merge";
 
 
 export interface DataElement{
-    title: string;
-    url: string;
-    abs: string;
+    Hits: Hits[]
+    suggest: string
+}
+
+export interface Hits{
+  title: string;
+  url: string;
+  abs: string;
 }
 
 
 interface Props  extends ComponentProps<'input'>{
-  setData?: React.Dispatch<React.SetStateAction<DataElement[]>>;
+  setData?: React.Dispatch<React.SetStateAction<DataElement>>;
   setHome: React.Dispatch<React.SetStateAction<boolean>>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setShowing: React.Dispatch<React.SetStateAction<number>>;

@@ -26,10 +26,10 @@ async function fetchWeatherApi(): Promise<any> {
         const myLat = "lat=" + loc[0] + "&";
         const myLon = "lon=" + loc[1] + "&";
         const myApiKey = "appid=" + WEATHER_API_KEY;
-        console.log("lat:" + myLat + "long:" + myLon)
+
 
         const response: AxiosResponse = await axios.get(apiURL + myLat + myLon + myApiKey);
-        console.log(response);
+
         return {
             temp: Math.round(response.data.main.temp - 273) + " °C",
             main: response.data.weather[0].main,

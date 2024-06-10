@@ -8,7 +8,7 @@ import { IconButton } from './icon-button';
 
 
 interface SearchListProps{
-    data: DataElement[];
+    data: DataElement;
     page: number;
     setPage: React.Dispatch<React.SetStateAction<number>>;
     showing: number;
@@ -17,14 +17,15 @@ interface SearchListProps{
 
 
 export function SearchList({data, page, setPage, showing, setShowing}: SearchListProps){
-
-    const totalPages = Math.ceil(data.length/10)
+    
+    const results = data.Hits
+    const totalPages = Math.ceil(results.length/10)
 
 
     function goToNextPage(){
       setPage(page+1)
       if(page == totalPages)
-        setShowing((data.length - showing) + showing);
+        setShowing((results.length - showing) + showing);
       else
         setShowing(showing + 10);
     }
@@ -36,20 +37,25 @@ export function SearchList({data, page, setPage, showing, setShowing}: SearchLis
 
     function goToLastPage() { 
       setPage(totalPages)
-      setShowing(data.length) 
+      setShowing(results.length) 
     }
 
     function goToFirstPage() { 
       setPage(1)
-      setShowing(data.length/totalPages) 
+      setShowing(results.length/totalPages) 
     }
 
 
     return (
         <div className='w-full overflow-x-auto bg-zinc-800'>
+          <p className='text-amber-300'>
+            {
+              data.suggest != null || data.suggest != "" ? data.suggest : null
+            }
+          </p>
           <Table className='min-w-full'>
             <tbody>
-            {data.slice( (page-1) * 10, page * 10).map((d, index) => (
+            {results.slice( (page-1) * 10, page * 10).map((d, index) => (
                  <React.Fragment key={index}>
                     <TableRow>
                         <TableCell colSpan={1} className='font-extrabold text-amber-300'>{d.title}</TableCell>
@@ -70,7 +76,7 @@ export function SearchList({data, page, setPage, showing, setShowing}: SearchLis
             </tbody>
             <tfoot>
             <tr>
-                        <TableCell colSpan={3}>Showing {showing} of {data.length} items</TableCell>
+                        <TableCell colSpan={3}>Showing {showing} of {results.length} items</TableCell>
                         <TableCell className="text-right" colSpan={3}>
                             <div className='inline-flex items-center gap-8'>
                                 <span>Page {page} of {totalPages}</span>
