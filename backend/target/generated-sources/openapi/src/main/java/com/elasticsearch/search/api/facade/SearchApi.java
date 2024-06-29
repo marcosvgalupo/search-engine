@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-07T11:32:17.674473188-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-28T20:44:44.114152691-03:00[America/Sao_Paulo]")
 
 @Validated
 @Api(value = "search", description = "the search API")
@@ -43,6 +43,7 @@ public interface SearchApi {
      * GET /search : Submits a query to Elasticsearch
      *
      * @param query Query to be submitted (optional)
+     * @param page Interval to get query data (optional)
      * @return OK (status code 200)
      *         or Unexpected error (status code 500)
      */
@@ -53,12 +54,12 @@ public interface SearchApi {
     @RequestMapping(value = "/search",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default CompletableFuture<ResponseEntity<Result>> search(@ApiParam(value = "Query to be submitted") @Valid @RequestParam(value = "query", required = false) String query) {
+    default CompletableFuture<ResponseEntity<Result>> search(@ApiParam(value = "Query to be submitted") @Valid @RequestParam(value = "query", required = false) String query,@ApiParam(value = "Interval to get query data") @Valid @RequestParam(value = "page", required = false) Integer page) {
         return CompletableFuture.supplyAsync(()-> {
             getRequest().ifPresent(request -> {
                 for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                     if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                        String exampleString = "{ \"Hits\" : [ { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" }, { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" } ], \"suggest\" : \"suggest\" }";
+                        String exampleString = "{ \"Hits\" : [ { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" }, { \"abs\" : \"abs\", \"title\" : \"title\", \"url\" : \"url\" } ], \"total\" : 0, \"suggest\" : \"suggest\" }";
                         ApiUtil.setExampleResponse(request, "application/json", exampleString);
                         break;
                     }

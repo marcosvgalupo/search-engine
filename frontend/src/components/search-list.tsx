@@ -19,13 +19,14 @@ interface SearchListProps{
 export function SearchList({data, page, setPage, showing, setShowing}: SearchListProps){
     
     const results = data.Hits
-    const totalPages = Math.ceil(results.length/10)
+    const dataSize = data.total
+    const totalPages = Math.ceil(dataSize/10)
 
 
     function goToNextPage(){
       setPage(page+1)
       if(page == totalPages)
-        setShowing((results.length - showing) + showing);
+        setShowing((dataSize - showing) + showing);
       else
         setShowing(showing + 10);
     }
@@ -37,12 +38,12 @@ export function SearchList({data, page, setPage, showing, setShowing}: SearchLis
 
     function goToLastPage() { 
       setPage(totalPages)
-      setShowing(results.length) 
+      setShowing(dataSize) 
     }
 
     function goToFirstPage() { 
       setPage(1)
-      setShowing(results.length/totalPages) 
+      setShowing(dataSize/totalPages) 
     }
 
 
@@ -76,7 +77,7 @@ export function SearchList({data, page, setPage, showing, setShowing}: SearchLis
             </tbody>
             <tfoot>
             <tr>
-                        <TableCell colSpan={3}>Showing {showing} of {results.length} items</TableCell>
+                        <TableCell colSpan={3}>Showing {showing} of {dataSize} items</TableCell>
                         <TableCell className="text-right" colSpan={3}>
                             <div className='inline-flex items-center gap-8'>
                                 <span>Page {page} of {totalPages}</span>

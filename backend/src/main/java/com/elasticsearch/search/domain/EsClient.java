@@ -10,6 +10,7 @@ import co.elastic.clients.elasticsearch.core.search.SuggestionBuilders;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.elasticsearch.search.processing.BuildQuery;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.altindag.ssl.SSLFactory;
 import org.apache.http.HttpHost;
@@ -29,6 +30,7 @@ import java.util.List;
 public class EsClient {
     private ElasticsearchClient elasticsearchClient;
     private static final int RESULT_MAX_VALUE = 10000;
+    private Query myQuery;
     private Suggester.Builder sb;
 
     public EsClient() {
@@ -64,23 +66,26 @@ public class EsClient {
         elasticsearchClient = new co.elastic.clients.elasticsearch.ElasticsearchClient(transport);
     }
 
-    public SearchResponse search(String query, List<String> contentInQuotes) {
+    public SearchResponse search(String query, List<String> contentInQuotes, Integer page) {
 
-        Query lastQuery;
+
         if(!contentInQuotes.isEmpty()){
-            Query matchPhrase = matchPhrase("content", query);
-            lastQuery = must(matchPhrase);
+            myQuery = BuildQuery.must(
+                            BuildQuery.matchPhrase("content", query)
+            );
         }
         else {
-            Query matchQuery = match("content", query);
-            lastQuery = should(matchQuery);
+            myQuery = BuildQuery.should(
+                            BuildQuery.match("content", query)
+            );
         }
 
         SearchResponse<ObjectNode> response;
+        assert myQuery != null;
         try {
             response = elasticsearchClient.search(s -> s
-                .index("wikipedia").from(0).size(RESULT_MAX_VALUE)
-                .query(lastQuery)
+                .index("wikipedia").from((page-1) * 10).size(10)
+                .query(myQuery)
                 .suggest(sug -> sug
                         .suggesters("my-suggestion", v -> v
                                 .term(t -> t
@@ -118,44 +123,5 @@ public class EsClient {
         }
 
         return response;
-    }
-
-
-    // Queries
-    public Query must(Query... qs){
-        BoolQuery.Builder bq = new BoolQuery.Builder();
-
-        for(Query q :  qs){
-            bq.must(q);
-        }
-
-        return bq.build()._toQuery();
-    }
-
-    public Query should(Query... qs){
-        BoolQuery.Builder bq = new BoolQuery.Builder();
-
-        for(Query q : qs){
-            bq.should(q);
-        }
-
-        return bq.build()._toQuery();
-    }
-
-    public Query matchPhrase(String field, String q){
-        return MatchPhraseQuery.of(s -> s.field(field).query(q))._toQuery();
-    }
-
-    public Query match(String field, String q){
-        return MatchQuery.of(s -> s.field(field).query(q))._toQuery();
-    }
-
-    public Query mustNot(Query... qs){
-      BoolQuery.Builder bq = new BoolQuery.Builder();
-
-      for(Query q : qs){
-          bq.mustNot(q);
-      }
-      return bq.build()._toQuery();
     }
 }

@@ -16,7 +16,7 @@ import javax.validation.constraints.*;
 /**
  * Result
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-07T11:32:17.674473188-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-28T20:44:44.114152691-03:00[America/Sao_Paulo]")
 
 public class Result  implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -27,6 +27,9 @@ public class Result  implements Serializable {
 
   @JsonProperty("suggest")
   private String suggest;
+
+  @JsonProperty("total")
+  private Integer total;
 
   public Result hits(List<ResultHits> hits) {
     this.hits = hits;
@@ -77,6 +80,26 @@ public class Result  implements Serializable {
     this.suggest = suggest;
   }
 
+  public Result total(Integer total) {
+    this.total = total;
+    return this;
+  }
+
+  /**
+   * Get total
+   * @return total
+  */
+  @ApiModelProperty(value = "")
+
+
+  public Integer getTotal() {
+    return total;
+  }
+
+  public void setTotal(Integer total) {
+    this.total = total;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -88,12 +111,13 @@ public class Result  implements Serializable {
     }
     Result result = (Result) o;
     return Objects.equals(this.hits, result.hits) &&
-        Objects.equals(this.suggest, result.suggest);
+        Objects.equals(this.suggest, result.suggest) &&
+        Objects.equals(this.total, result.total);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hits, suggest);
+    return Objects.hash(hits, suggest, total);
   }
 
   @Override
@@ -103,6 +127,7 @@ public class Result  implements Serializable {
     
     sb.append("    hits: ").append(toIndentedString(hits)).append("\n");
     sb.append("    suggest: ").append(toIndentedString(suggest)).append("\n");
+    sb.append("    total: ").append(toIndentedString(total)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge";
 export interface DataElement{
     Hits: Hits[]
     suggest: string
+    total: number
 }
 
 export interface Hits{
@@ -22,19 +23,20 @@ interface Props  extends ComponentProps<'input'>{
   setHome: React.Dispatch<React.SetStateAction<boolean>>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setShowing: React.Dispatch<React.SetStateAction<number>>;
+  page: number
 }
 
 
 
 
-export function SearchInput({setData, setHome, setPage, setShowing,...props}: Props) {
+export function SearchInput({setData, setHome, setPage, setShowing, page,...props}: Props) {
 
   const [searchTerm, setSearchTerm] = useState("");
   const emptySearch = /^[\s]*$/
 
 
   const handleSearch = async() => {
-    const responseData = await fetchApi(searchTerm);
+    const responseData = await fetchApi(searchTerm, page);
     if(responseData.length < 10){
       setShowing(responseData.length)
       console.log("entrou")
