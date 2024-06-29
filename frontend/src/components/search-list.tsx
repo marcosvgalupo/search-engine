@@ -4,59 +4,35 @@ import React, {useState } from 'react';
 import { TableRow } from './Table/table-row';
 import { TableCell } from './Table/table-cell';
 import { IconButton } from './icon-button';
+import { PaginationProps } from '../hooks/usePagination';
+import { SearchProps } from '../hooks/useSearch';
 
 
 
 interface SearchListProps{
-    data: DataElement;
-    page: number;
-    setPage: React.Dispatch<React.SetStateAction<number>>;
-    showing: number;
-    setShowing: React.Dispatch<React.SetStateAction<number>>;
+  search: SearchProps;  
+  pagination: PaginationProps;
 }
 
 
-export function SearchList({data, page, setPage, showing, setShowing}: SearchListProps){
+export function SearchList({search, pagination}: SearchListProps){
+
+
+    const {page, showing, dataSize, goToNextPage, goToPreviousPage, goToLastPage, goToFirstPage,} = pagination
     
-    const results = data.Hits
-    const dataSize = data.total
+    const results = search.data.Hits
     const totalPages = Math.ceil(dataSize/10)
-
-
-    function goToNextPage(){
-      setPage(page+1)
-      if(page == totalPages)
-        setShowing((dataSize - showing) + showing);
-      else
-        setShowing(showing + 10);
-    }
-
-    function goToPreviousPage() { 
-      setPage(page-1)
-      setShowing(showing-10); 
-    }
-
-    function goToLastPage() { 
-      setPage(totalPages)
-      setShowing(dataSize) 
-    }
-
-    function goToFirstPage() { 
-      setPage(1)
-      setShowing(dataSize/totalPages) 
-    }
-
 
     return (
         <div className='w-full overflow-x-auto bg-zinc-800'>
           <p className='text-amber-300'>
             {
-              data.suggest != null || data.suggest != "" ? data.suggest : null
+              search.data.suggest != null || search.data.suggest != "" ? search.data.suggest : null
             }
           </p>
           <Table className='min-w-full'>
             <tbody>
-            {results.slice( (page-1) * 10, page * 10).map((d, index) => (
+            {results.map((d, index) => (
                  <React.Fragment key={index}>
                     <TableRow>
                         <TableCell colSpan={1} className='font-extrabold text-amber-300'>{d.title}</TableCell>
