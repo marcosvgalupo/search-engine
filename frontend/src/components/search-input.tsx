@@ -2,12 +2,15 @@
 import React, { ComponentProps, useState } from "react";
 import { fetchApi } from "../connection/api";
 import { twMerge } from "tailwind-merge";
+import { SearchProps } from "../hooks/useSearch";
+import { PaginationProps } from "../hooks/usePagination";
 
 
 
 export interface DataElement{
     Hits: Hits[]
     suggest: string
+    total: number
 }
 
 export interface Hits{
@@ -18,50 +21,46 @@ export interface Hits{
 
 
 interface Props  extends ComponentProps<'input'>{
-  setData?: React.Dispatch<React.SetStateAction<DataElement>>;
-  setHome: React.Dispatch<React.SetStateAction<boolean>>;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  setShowing: React.Dispatch<React.SetStateAction<number>>;
+  search: SearchProps;
+  pagination: PaginationProps
+  setHome: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
 
 
-export function SearchInput({setData, setHome, setPage, setShowing,...props}: Props) {
+export function SearchInput({search, pagination, setHome,...props}: Props) {
 
-  const [searchTerm, setSearchTerm] = useState("");
   const emptySearch = /^[\s]*$/
 
 
   const handleSearch = async() => {
-    const responseData = await fetchApi(searchTerm);
+    const responseData = await fetchApi(search.searchTerm, pagination.page);
     if(responseData.length < 10){
-      setShowing(responseData.length)
+      pagination.setShowing(responseData.length)
       console.log("entrou")
     }
     else{
-      setShowing(10);
+      pagination.setShowing(10);
     }
-    if(setData) setData(responseData);
+    search.setData(responseData);
   };
 
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.type === "keydown" && event.key === "Enter" && !emptySearch.test(searchTerm) ) {
+    if (event.type === "keydown" && event.key === "Enter" && !emptySearch.test(search.searchTerm) ) {
       event.preventDefault();
-      setSearchTerm("");
       setHome(false);
-      setPage(1);
+      pagination.setPage(1);
       handleSearch();
     }
   };
 
   const handleClick = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if(e.type == "click" &&  !emptySearch.test(searchTerm) ){
+    if(e.type == "click" &&  !emptySearch.test(search.searchTerm) ){
       e.preventDefault();
-      setSearchTerm("");
       setHome(false);
-      setPage(1);
+      pagination.setPage(1);
       handleSearch();
     }
   }
@@ -83,8 +82,8 @@ export function SearchInput({setData, setHome, setPage, setShowing,...props}: Pr
           ) 
         }
         placeholder="Search..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        value={search.searchTerm}
+        onChange={(e) => search.setSearchTerm(e.target.value)}
         onKeyDown={handleKeyPress}
       />
       <button type="submit" className="flex items-center" onClick={handleClick}>

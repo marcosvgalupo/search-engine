@@ -17,6 +17,11 @@ paths:
           description: Query to be submitted
           schema:
             type: string
+        - name: page
+          in: query
+          description: Interval to get query data
+          schema:
+            type: integer
       responses:
         200:
           description: OK
@@ -48,6 +53,8 @@ components:
                 type: string
         suggest:
           type: string
+        total:
+          type: integer
     Error:
       type: object
       required:

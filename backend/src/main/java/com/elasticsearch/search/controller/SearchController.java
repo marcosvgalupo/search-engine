@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
@@ -22,8 +20,8 @@ public class SearchController implements SearchApi {
     }
 
     @Override
-    public CompletableFuture<ResponseEntity<Result>> search(String query) {
-        var result = searchService.submitQuery(query);
+    public CompletableFuture<ResponseEntity<Result>> search(String query, Integer page) {
+        var result = searchService.submitQuery(query, page);
         return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(result));
     }
 }
