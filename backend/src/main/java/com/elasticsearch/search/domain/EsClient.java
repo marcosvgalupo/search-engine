@@ -3,16 +3,12 @@ package com.elasticsearch.search.domain;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.elasticsearch.core.search.FieldSuggester;
 import co.elastic.clients.elasticsearch.core.search.Suggester;
 import co.elastic.clients.elasticsearch.core.search.Suggestion;
-import co.elastic.clients.elasticsearch.core.search.SuggestionBuilders;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.elasticsearch.search.processing.BuildQuery;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.altindag.ssl.SSLFactory;
 import org.apache.http.HttpHost;
@@ -72,9 +68,6 @@ public class EsClient {
 
     public SearchResponse search(String query, List<List<String>> contentInQuotes, Integer page) {
 
-        System.out.println("grupo 0: " + contentInQuotes.get(0));
-        System.out.println("grupo 1: " + contentInQuotes.get(1));
-        System.out.println("current query: " + query);
         if(!contentInQuotes.get(1).isEmpty()){
             if(contentInQuotes.get(0).isEmpty()){
                 myQuery = BuildQuery.must(
