@@ -6,6 +6,7 @@ async function fetchApi(q: string, page: number): Promise<any> {
     const p: string = '&page=' + page;
     try {
         const response: AxiosResponse = await axios.get(apiURL + q + p);
+        console.log(response)
         return response.data;
     } catch (error) {
         console.log(error);

@@ -14,23 +14,34 @@
 
   export const usePagination = (totalItems: number, onPageChange: (page: number) => void): PaginationProps => {
     const [page, setPage] = useState(1);
-    const [showing, setShowing] = useState(10);
+    let showingSize;
+    if(totalItems < 10)
+      showingSize = totalItems;
+    else
+      showingSize = 10;
+    const [showing, setShowing] = useState(showingSize);
     const totalPages = Math.ceil(totalItems / 10);
     const dataSize = totalItems;
     const shortData = (dataSize - showing) + showing
 
     const goToNextPage = () => {
-      console.log(page)
       if (page < totalPages) {
         const newPage = page + 1;
+        console.log("a")
         setPage(newPage);
         onPageChange(newPage);
-        console.log(page)
       }
-      if(page == totalPages)
+      if(page == totalPages){
         setShowing(shortData);
-      else
-        setShowing(Math.ceil(showing + 10));
+        console.log("b")
+      } 
+      else{
+        if(showing+10 > dataSize)
+          setShowing(showing + (dataSize - showing))
+        else
+          setShowing(Math.ceil(showing + 10));
+        console.log("c")
+      }
     };
 
     const goToPreviousPage = () => {

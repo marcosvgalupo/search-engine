@@ -11,6 +11,8 @@ import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.elasticsearch.search.processing.BuildQuery;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.altindag.ssl.SSLFactory;
 import org.apache.http.HttpHost;
@@ -22,6 +24,8 @@ import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.client.RestClient;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -66,17 +70,27 @@ public class EsClient {
         elasticsearchClient = new co.elastic.clients.elasticsearch.ElasticsearchClient(transport);
     }
 
-    public SearchResponse search(String query, List<String> contentInQuotes, Integer page) {
+    public SearchResponse search(String query, List<List<String>> contentInQuotes, Integer page) {
 
-
-        if(!contentInQuotes.isEmpty()){
-            myQuery = BuildQuery.must(
-                            BuildQuery.matchPhrase("content", query)
-            );
+        System.out.println("grupo 0: " + contentInQuotes.get(0));
+        System.out.println("grupo 1: " + contentInQuotes.get(1));
+        System.out.println("current query: " + query);
+        if(!contentInQuotes.get(1).isEmpty()){
+            if(contentInQuotes.get(0).isEmpty()){
+                myQuery = BuildQuery.must(
+                        BuildQuery.matchPhrase("content", contentInQuotes.get(1).toString())
+                );
+            }
+            else{
+                myQuery = BuildQuery.must(
+                        BuildQuery.matchPhrase("content", contentInQuotes.get(1).toString()),
+                        BuildQuery.match("content", contentInQuotes.get(0).toString())
+                );
+            }
         }
         else {
             myQuery = BuildQuery.should(
-                            BuildQuery.match("content", query)
+                            BuildQuery.match("content", contentInQuotes.get(0).toString())
             );
         }
 
@@ -103,25 +117,38 @@ public class EsClient {
         return response;
     }
 
-    public SearchResponse searchSuggestion(String query){
+    public String searchSuggestion(String query){
         SearchResponse<ObjectNode> response;
+        String completeSuggestion = "";
         try {
+            var suggester = Suggester.of(s -> s.suggesters("", su -> su.text(query).term(t -> t.field("content").size(1))));
             response = elasticsearchClient.search(s -> s
                             .index("wikipedia")
-                            .suggest(sug -> sug
-                                    .suggesters("", v -> v
-                                            .term(t -> t
-                                                    .field("content").size(2)
-                                            )
-                                            .text(query)
-                                    )
-                            )
+                            .suggest(suggester)
                     , ObjectNode.class
             );
+
+            String[] queryAsArray = query.split("\\s+");
+            int i = 0;
+
+            for (HashMap.Entry<String, List<Suggestion<ObjectNode>>> entry : response.suggest().entrySet()) {
+                List<Suggestion<ObjectNode>> suggestions = entry.getValue();
+                for (Suggestion<ObjectNode> suggestion : suggestions) {
+                    if(!suggestion.term().options().isEmpty()){
+                        if(queryAsArray[i].contains("\"")){
+                            completeSuggestion += (queryAsArray[i].indexOf("\"") == queryAsArray[i].length()-1) ?
+                                    " <strong>" + suggestion.term().options().get(0).text().toString() + "</strong>\"" :
+                                    " \"<strong>" + suggestion.term().options().get(0).text().toString() + "</strong>";
+                        }
+                        else
+                            completeSuggestion += " <strong>" + suggestion.term().options().get(0).text().toString() + "</strong>";
+                    }
+                    i++;
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return response;
+        return completeSuggestion;
     }
 }
