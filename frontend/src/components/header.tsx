@@ -17,7 +17,11 @@ export function Header(props: HeaderProps){
         className={
             twMerge("h-20 flex items-center justify-between ml-4 mr-7 bg-zinc-800", props.className)
         }>
-            <h1 className="ml-6 text-amber-300">Logo</h1>
+        <div className="flex items-stretch space-x-0">
+            <img src="src/icons/chevron-left.svg" className="inline-block" />
+            <img src="src/icons/chevron-right.svg" className="inline-block" />
+            <span className="text-amber-300 font-redditMono font-semibold text-lg">datahunter</span>
+        </div>
             <Weather setWeather={setWeather} weather={weather}/>
         </header>
     )

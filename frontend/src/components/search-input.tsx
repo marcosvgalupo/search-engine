@@ -1,5 +1,5 @@
 // SearchInput.tsx
-import React, { ComponentProps, useState } from "react";
+import React, { ComponentProps } from "react";
 import { fetchApi } from "../connection/api";
 import { twMerge } from "tailwind-merge";
 import { SearchProps } from "../hooks/useSearch";
@@ -36,9 +36,8 @@ export function SearchInput({search, pagination, setHome,...props}: Props) {
 
   const handleSearch = async() => {
     const responseData = await fetchApi(search.searchTerm, pagination.page);
-    if(responseData.length < 10){
-      pagination.setShowing(responseData.length)
-      console.log("entrou")
+    if(responseData.Hits.length < 10){  
+      pagination.setShowing(responseData.Hits.length)
     }
     else{
       pagination.setShowing(10);

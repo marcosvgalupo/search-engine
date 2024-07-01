@@ -1,6 +1,5 @@
 import { Table } from './Table/table'
-import { DataElement } from './search-input'
-import React, {useState } from 'react';
+import React, { useCallback } from 'react';
 import { TableRow } from './Table/table-row';
 import { TableCell } from './Table/table-cell';
 import { IconButton } from './icon-button';
@@ -14,7 +13,6 @@ interface SearchListProps{
   pagination: PaginationProps;
 }
 
-
 export function SearchList({search, pagination}: SearchListProps){
 
 
@@ -23,16 +21,65 @@ export function SearchList({search, pagination}: SearchListProps){
     const results = search.data.Hits
     const totalPages = Math.ceil(dataSize/10)
 
+
+    const handleSearchClick = useCallback( () => {
+      search.handleSearch(pagination.page);
+    }, [search, pagination.page])
+
+    function decodeHtmlEntities(input: string) {
+      const noStrong = input.replace(/<\/?strong>/gi, ''); // Remove tags <strong> e </strong>
+      const initialQuote = noStrong.startsWith('"') ? '"' : '';
+      const finalQuote = noStrong.endsWith('"') ? '"' : '';
+      const suggestArray = noStrong.split(" "); // Divide a string em um array de palavras
+      const searchTermArray = search.searchTerm.split(" "); // Divide o termo de busca em um array de palavras
+    
+      return (
+        <div className='text-sm'>
+          <span className='text-[#fceaa1] my-5'>Including results for: </span>
+          {initialQuote}
+          {suggestArray.map((s, i) => {
+            const searchTermIndex = searchTermArray.findIndex(term => s.toLowerCase().includes(term.toLowerCase()));
+            if (searchTermIndex !== -1) {
+              return (
+                <span className="text-amber-300" key={i}>
+                  {s.split(new RegExp(`(${searchTermArray[searchTermIndex]})`, 'gi')).map((part, index) =>
+                    part.toLowerCase() === searchTermArray[searchTermIndex].toLowerCase() ?
+                      <span className="texto-destacado" key={index}>{part}</span> :
+                      <span key={index}>{part}</span>
+                  )}
+                </span>
+              );
+            } else {
+              return (
+                <span className="text-amber-300" key={i}>{s}</span>
+              );
+            }
+          })}
+          {finalQuote}
+          <br />
+          <span className='text-[#fceaa1]'>Search only for: {" "}
+            <button className='hover:underline' onClick={() => handleSearchClick()}>
+              {search.searchTerm}
+            </button>
+          </span>
+        </div>
+      );
+    };
+    
+    
+
+
+
     return (
         <div className='w-full overflow-x-auto bg-zinc-800'>
-          <p className='text-amber-300'>
-            {
-              search.data.suggest != null || search.data.suggest != "" ? search.data.suggest : null
-            }
-          </p>
+          {
+              search.data.suggest != null && search.data.suggest != "" ? 
+              decodeHtmlEntities(search.data.suggest)
+              : null
+          }
           <Table className='min-w-full'>
             <tbody>
-            {results.map((d, index) => (
+            {results.length > 0 ? results.map((d, index) => (
                  <React.Fragment key={index}>
                     <TableRow>
                         <TableCell colSpan={1} className='font-extrabold text-amber-300'>{d.title}</TableCell>
@@ -49,14 +96,22 @@ export function SearchList({search, pagination}: SearchListProps){
                          <TableCell colSpan={4}>{d.abs}</TableCell>
                     </TableRow>
                 </React.Fragment>
-            ))}
+            )) : (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center text-amber-300 py-4">
+                  Not found
+                </TableCell>
+              </TableRow>
+            )}
             </tbody>
             <tfoot>
             <tr>
                         <TableCell colSpan={3}>Showing {showing} of {dataSize} items</TableCell>
                         <TableCell className="text-right" colSpan={3}>
                             <div className='inline-flex items-center gap-8'>
-                                <span>Page {page} of {totalPages}</span>
+                              {
+                                results.length > 0 ? <span>Page {page} of {totalPages}</span> : <span>Page {page-1} of {totalPages}</span>
+                              }
                                 <div className='flex gap-1.5'>
                                     <IconButton onClick={goToFirstPage} disabled={page === 1}>
                                        <img src="src/icons/chevrons-left.svg" alt="Chevrons Left" />
