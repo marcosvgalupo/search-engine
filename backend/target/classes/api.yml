@@ -22,6 +22,10 @@ paths:
           description: Interval to get query data
           schema:
             type: integer
+        - name: isCorrection
+          in: query
+          schema:
+            type: integer
       responses:
         200:
           description: OK

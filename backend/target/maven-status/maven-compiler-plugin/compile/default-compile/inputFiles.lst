@@ -1,5 +1,4 @@
 /home/marcosvgalupo/Música/search-engine/backend/src/main/java/com/elasticsearch/search/processing/BuildQuery.java
-/home/marcosvgalupo/Música/search-engine/backend/src/main/java/com/elasticsearch/search/processing/FilterQuery.java
 /home/marcosvgalupo/Música/search-engine/backend/target/generated-sources/openapi/src/main/java/com/elasticsearch/search/api/model/Result.java
 /home/marcosvgalupo/Música/search-engine/backend/target/generated-sources/openapi/src/main/java/com/elasticsearch/search/api/facade/ApiUtil.java
 /home/marcosvgalupo/Música/search-engine/backend/src/main/java/com/elasticsearch/search/processing/TreatQuery.java

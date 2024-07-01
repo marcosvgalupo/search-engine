@@ -16,7 +16,7 @@ import javax.validation.constraints.*;
 /**
  * Result
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-28T20:44:44.114152691-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-01T10:00:27.313761127-03:00[America/Sao_Paulo]")
 
 public class Result  implements Serializable {
   private static final long serialVersionUID = 1L;

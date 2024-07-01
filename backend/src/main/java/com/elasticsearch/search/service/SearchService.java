@@ -21,18 +21,19 @@ public class SearchService {
         this.esClient = esClient;
     }
 
-    public Result submitQuery(String query, Integer page){
+    public Result submitQuery(String query, Integer page, Integer isCorrection){
         Result result = new Result();
 
-        var suggestion = esClient.searchSuggestion(query);
-        result.suggest(suggestion);
+        if(isCorrection == 0) {
+            var suggestion = esClient.searchSuggestion(query);
+            result.suggest(suggestion);
 
-        String treatedSuggestion = TreatQuery.treatContent(suggestion);
-        System.out.println(treatedSuggestion);
-        if(!treatedSuggestion.isEmpty()){
-            query = TreatQuery.getFullAdjustedQuery(query, treatedSuggestion);
+            String treatedSuggestion = TreatQuery.treatContent(suggestion);
+            System.out.println(treatedSuggestion);
+            if (!treatedSuggestion.isEmpty()) {
+                query = TreatQuery.getFullAdjustedQuery(query, treatedSuggestion);
+            }
         }
-
         var searchResponse = esClient.search(query, TreatQuery.treatQuotes(query), page);
 
 

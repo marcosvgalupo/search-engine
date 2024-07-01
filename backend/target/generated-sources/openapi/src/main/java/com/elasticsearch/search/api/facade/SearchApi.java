@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-28T20:44:44.114152691-03:00[America/Sao_Paulo]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-01T10:00:27.313761127-03:00[America/Sao_Paulo]")
 
 @Validated
 @Api(value = "search", description = "the search API")
@@ -44,6 +44,7 @@ public interface SearchApi {
      *
      * @param query Query to be submitted (optional)
      * @param page Interval to get query data (optional)
+     * @param isCorrection  (optional)
      * @return OK (status code 200)
      *         or Unexpected error (status code 500)
      */
@@ -54,7 +55,7 @@ public interface SearchApi {
     @RequestMapping(value = "/search",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default CompletableFuture<ResponseEntity<Result>> search(@ApiParam(value = "Query to be submitted") @Valid @RequestParam(value = "query", required = false) String query,@ApiParam(value = "Interval to get query data") @Valid @RequestParam(value = "page", required = false) Integer page) {
+    default CompletableFuture<ResponseEntity<Result>> search(@ApiParam(value = "Query to be submitted") @Valid @RequestParam(value = "query", required = false) String query,@ApiParam(value = "Interval to get query data") @Valid @RequestParam(value = "page", required = false) Integer page,@ApiParam(value = "") @Valid @RequestParam(value = "isCorrection", required = false) Integer isCorrection) {
         return CompletableFuture.supplyAsync(()-> {
             getRequest().ifPresent(request -> {
                 for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
