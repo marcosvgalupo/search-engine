@@ -2,14 +2,11 @@ package com.elasticsearch.search.service;
 
 import co.elastic.clients.elasticsearch.core.search.Hit;
 
-import co.elastic.clients.elasticsearch.core.search.TermSuggest;
+
 import com.elasticsearch.search.api.model.Result;
 import com.elasticsearch.search.api.model.ResultHits;
 import com.elasticsearch.search.domain.EsClient;
 import com.elasticsearch.search.processing.TreatQuery;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
 import java.util.List;

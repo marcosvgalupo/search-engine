@@ -47,6 +47,21 @@ public class TreatQuery {
         return result;
     }
 
+    public static boolean containsPartialSubstring(String sugWord, String word) {
+        int wordLength = word.length();
+        int sugWordLength = sugWord.length();
+
+        for (int start = 0; start < wordLength; start++) { // Começa a partir da terceira letra
+            for (int end = start + 3; end <= wordLength-2; end++) {
+                    String substring = word.substring(start, end);
+                    if (sugWord.contains(substring)) {
+                        return true;
+                    }
+            }
+        }
+        return false;
+    }
+
 
 
     public static String getFullAdjustedQuery(String originalQuery, String suggestion) {
@@ -62,7 +77,7 @@ public class TreatQuery {
 
 
             for (String sugWord : splittedSuggestion) {
-                if (sugWord.contains(word)) {
+                if (containsPartialSubstring(sugWord, word)) {
                     adjustedQuery += suggestion + " ";
                     replaced = true;
                     break;
@@ -76,12 +91,5 @@ public class TreatQuery {
         }
 
         return adjustedQuery.trim(); // Remove espaços em branco extras no final
-    }
-
-
-    public static void main(String[] args) {
-        System.out.println(
-            treatQuotes("\"binary search\"")
-        );
     }
 }
